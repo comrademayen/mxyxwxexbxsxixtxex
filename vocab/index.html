@@ -1,1 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Ultimate Vocabulary</title>
+    <style>
+        :root {
+            --bg-body: #f8f9fa;
+            --text-main: #212529;
+            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --accent: #3b82f6;
+            --border: #e9ecef;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --header-bg: #ffffff;
+        }
 
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --bg-body: #0f172a;
+            --text-main: #e2e8f0;
+            --card-bg: #1e293b;
+            --primary: #60a5fa;
+            --accent: #3b82f6;
+            --border: #334155;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            --header-bg: #1e293b;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 50px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- CONTROL PANEL (Fixed Top) --- */
+        .control-panel {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--header-bg);
+            padding: 10px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 { margin: 0; font-size: 1.2rem; color: var(--primary); }
+
+        /* Toggle Switch */
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Filter Buttons */
+        .filters {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+            -webkit-overflow-scrolling: touch; /* Smooth scroll on mobile */
+        }
+
+        .filter-btn {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 6px 16px;
+            border-radius: 20px;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* --- CONTENT LAYOUT --- */
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .section-header {
+            font-size: 1.5rem;
+            margin: 30px 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+            display: block; /* Ensure it shows/hides correctly */
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: var(--shadow);
+            page-break-inside: avoid;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+
+        ul { margin: 0; padding-left: 0; list-style: none; }
+        
+        li {
+            padding: 4px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        li:last-child { border-bottom: none; }
+
+        strong { color: var(--primary); }
+
+        /* --- UTILITY CLASSES --- */
+        .hidden { display: none !important; }
+
+        /* --- PRINT STYLES --- */
+        @media print {
+            .control-panel { display: none; } /* Hide filters/toggle */
+            body { 
+                background: white; 
+                color: black; 
+                padding: 0;
+            }
+            .container { 
+                max-width: 100%; 
+                margin: 0; 
+                padding: 0;
+            }
+            .grid {
+                display: block;
+                column-count: 2;
+                column-gap: 20px;
+            }
+            .card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-bottom: 10px;
+            }
+            .section-header {
+                font-size: 14pt;
+                break-after: avoid;
+                margin-top: 20px;
+                border-bottom: 2px solid black;
+            }
+            h3 { color: black; font-size: 11pt; }
+            li { border-bottom: 1px solid #eee; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="control-panel">
+        <div class="top-row">
+            <h1>IELTS Pro</h1>
+            <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+        </div>
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterContent('all')">All</button>
+            <button class="filter-btn" onclick="filterContent('general')">General</button>
+            <button class="filter-btn" onclick="filterContent('task2')">Task 2</button>
+            <button class="filter-btn" onclick="filterContent('task1')">Task 1</button>
+            <button class="filter-btn" onclick="filterContent('speaking')">Speaking</button>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div id="general-header" class="section-header">1. General Academic</div>
+        <div id="general-content" class="grid">
+            <div class="card">
+                <h3>1. Opinion Phrases</h3>
+                <ul>
+                    <li>I firmly believe</li>
+                    <li>I strongly argue that</li>
+                    <li>From my perspective</li>
+                    <li>It is widely acknowledged that</li>
+                    <li>There is no denying that</li>
+                    <li>I am convinced that</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>2. Advantages</h3>
+                <ul>
+                    <li>beneficial</li>
+                    <li>advantageous</li>
+                    <li>rewarding</li>
+                    <li>valuable</li>
+                    <li>practical</li>
+                    <li>effective</li>
+                    <li>productive</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>3. Disadvantages</h3>
+                <ul>
+                    <li>detrimental</li>
+                    <li>harmful</li>
+                    <li>counterproductive</li>
+                    <li>inefficient</li>
+                    <li>problematic</li>
+                    <li>concerning</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>4. Cause & Effect</h3>
+                <ul>
+                    <li>leads to</li>
+                    <li>results in</li>
+                    <li>contributes to</li>
+                    <li>gives rise to</li>
+                    <li>triggers</li>
+                    <li>stems from</li>
+                    <li>is attributed to</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>5. Contrast</h3>
+                <ul>
+                    <li>however</li>
+                    <li>nevertheless</li>
+                    <li>on the other hand</li>
+                    <li>whereas</li>
+                    <li>in contrast</li>
+                    <li>despite this</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>6. Trend Vocabulary</h3>
+                <ul>
+                    <li>increased significantly</li>
+                    <li>rose steadily</li>
+                    <li>remained stable</li>
+                    <li>fluctuated</li>
+                    <li>experienced a sharp decline</li>
+                    <li>witnessed rapid growth</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>7. Discussion Vocabulary</h3>
+                <ul>
+                    <li>a controversial issue</li>
+                    <li>a pressing concern</li>
+                    <li>a growing trend</li>
+                    <li>a widespread problem</li>
+                    <li>a long-term solution</li>
+                    <li>short-term benefits</li>
+                    <li>sustainable development</li>
+                    <li>social implications</li>
+                    <li>economic impact</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>8. Academic Verbs</h3>
+                <ul>
+                    <li>enhance</li>
+                    <li>undermine</li>
+                    <li>facilitate</li>
+                    <li>discourage</li>
+                    <li>encourage</li>
+                    <li>promote</li>
+                    <li>address</li>
+                    <li>tackle</li>
+                    <li>implement</li>
+                    <li>allocate</li>
+                    <li>generate</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>9. High-Impact Adjectives</h3>
+                <ul>
+                    <li>significant</li>
+                    <li>substantial</li>
+                    <li>considerable</li>
+                    <li>crucial</li>
+                    <li>essential</li>
+                    <li>inevitable</li>
+                    <li>complex</li>
+                    <li>diverse</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>10. Fluency Boost (Speaking)</h3>
+                <ul>
+                    <li>To be honest</li>
+                    <li>As far as I’m concerned</li>
+                    <li>If I had to choose</li>
+                    <li>One possible explanation is that</li>
+                    <li>What makes it more complicated is that</li>
+                    <li>The main reason behind this is</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="task2-header" class="section-header">2. Writing Task 2</div>
+        <div id="task2-content" class="grid">
+            <div class="card">
+                <h3>🔸 GOOD</h3>
+                <ul>
+                    <li>beneficial</li>
+                    <li>positive</li>
+                    <li>effective</li>
+                    <li>advantageous</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 BAD</h3>
+                <ul>
+                    <li>negative</li>
+                    <li>harmful</li>
+                    <li>detrimental</li>
+                    <li>damaging</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 BIG</h3>
+                <ul>
+                    <li>significant</li>
+                    <li>considerable</li>
+                    <li>substantial</li>
+                    <li>major</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 SMALL</h3>
+                <ul>
+                    <li>minor</li>
+                    <li>limited</li>
+                    <li>minimal</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 MANY</h3>
+                <ul>
+                    <li>numerous</li>
+                    <li>a large number of</li>
+                    <li>a wide range of</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 MORE / LESS</h3>
+                <ul>
+                    <li><strong>More:</strong> increasingly, to a greater extent, further</li>
+                    <li><strong>Less:</strong> to a lesser extent, reduced, limited</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 VERY / A LOT</h3>
+                <ul>
+                    <li><strong>Very:</strong> extremely, highly, particularly, significantly</li>
+                    <li><strong>A Lot:</strong> significantly, substantially, to a large extent</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 IMPORTANT</h3>
+                <ul>
+                    <li>essential</li>
+                    <li>crucial</li>
+                    <li>vital</li>
+                    <li>significant</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 PEOPLE</h3>
+                <ul>
+                    <li>individuals</li>
+                    <li>citizens</li>
+                    <li>consumers</li>
+                    <li>workers</li>
+                    <li>students</li>
+                    <li>young people</li>
+                    <li>members of society</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 PROBLEM</h3>
+                <ul>
+                    <li>issue</li>
+                    <li>challenge</li>
+                    <li>concern</li>
+                    <li>difficulty</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 SOLUTION</h3>
+                <ul>
+                    <li>measure</li>
+                    <li>approach</li>
+                    <li>strategy</li>
+                    <li>response</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 CHANGE</h3>
+                <ul>
+                    <li>development</li>
+                    <li>shift</li>
+                    <li>transformation</li>
+                    <li>trend</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 HELP</h3>
+                <ul>
+                    <li>assist</li>
+                    <li>contribute to</li>
+                    <li>support</li>
+                    <li>facilitate</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 IMPROVE</h3>
+                <ul>
+                    <li>enhance</li>
+                    <li>strengthen</li>
+                    <li>boost</li>
+                    <li>promote</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 MAKE</h3>
+                <ul>
+                    <li>create</li>
+                    <li>produce</li>
+                    <li>lead to</li>
+                    <li>result in</li>
+                    <li>generate</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 GET</h3>
+                <ul>
+                    <li>obtain</li>
+                    <li>acquire</li>
+                    <li>receive</li>
+                    <li>become</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 USE</h3>
+                <ul>
+                    <li>utilise</li>
+                    <li>rely on</li>
+                    <li>adopt</li>
+                    <li>implement</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔸 NOWADAYS</h3>
+                <ul>
+                    <li>in recent years</li>
+                    <li>in modern society</li>
+                    <li>in today’s world</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="task1-header" class="section-header">3. Writing Task 1</div>
+        <div id="task1-content" class="grid">
+            <div class="card">
+                <h3>1️⃣ Large / Small Amounts</h3>
+                <ul>
+                    <li>substantial</li>
+                    <li>considerable</li>
+                    <li>significant</li>
+                    <li>marked</li>
+                    <li>dramatic</li>
+                    <li>minimal</li>
+                    <li>marginal</li>
+                    <li>negligible</li>
+                    <li>modest</li>
+                    <li>slight</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>2️⃣ Proportions / Shares</h3>
+                <ul>
+                    <li>accounted for</li>
+                    <li>constituted</li>
+                    <li>represented</li>
+                    <li>comprised</li>
+                    <li>made up</li>
+                    <li>formed</li>
+                    <li>contributed to</li>
+                    <li>the majority of</li>
+                    <li>the largest share</li>
+                    <li>the smallest proportion</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>3️⃣ Increase Verbs</h3>
+                <ul>
+                    <li>rose</li>
+                    <li>increased</li>
+                    <li>grew</li>
+                    <li>climbed</li>
+                    <li>surged</li>
+                    <li>escalated</li>
+                    <li>expanded</li>
+                    <li>advanced</li>
+                    <li>improved</li>
+                    <li>peaked</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>4️⃣ Decrease Verbs</h3>
+                <ul>
+                    <li>declined</li>
+                    <li>fell</li>
+                    <li>dropped</li>
+                    <li>decreased</li>
+                    <li>dipped</li>
+                    <li>reduced</li>
+                    <li>plummeted</li>
+                    <li>shrank</li>
+                    <li>contracted</li>
+                    <li>diminished</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>5️⃣ Stability / No Change</h3>
+                <ul>
+                    <li>remained stable</li>
+                    <li>remained constant</li>
+                    <li>stayed steady</li>
+                    <li>showed little variation</li>
+                    <li>plateaued</li>
+                    <li>levelled off</li>
+                    <li>remained relatively unchanged</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>6️⃣ Comparison Structures</h3>
+                <ul>
+                    <li>in contrast</li>
+                    <li>by comparison</li>
+                    <li>whereas</li>
+                    <li>while</li>
+                    <li>compared with</li>
+                    <li>significantly higher than</li>
+                    <li>considerably lower than</li>
+                    <li>far exceeding</li>
+                    <li>marginally above</li>
+                    <li>slightly below</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>7️⃣ Trend Description</h3>
+                <ul>
+                    <li>experienced steady growth</li>
+                    <li>witnessed a gradual decline</li>
+                    <li>showed a consistent upward trend</li>
+                    <li>recorded a sharp increase</li>
+                    <li>underwent significant fluctuation</li>
+                    <li>demonstrated moderate growth</li>
+                    <li>exhibited minor variation</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>8️⃣ Ranking Language</h3>
+                <ul>
+                    <li>the dominant category</li>
+                    <li>the leading source</li>
+                    <li>the most prevalent</li>
+                    <li>ranked first</li>
+                    <li>was the primary contributor</li>
+                    <li>emerged as the largest segment</li>
+                    <li>was the least common</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>9️⃣ Process Vocabulary</h3>
+                <ul>
+                    <li>is produced</li>
+                    <li>is generated</li>
+                    <li>is converted into</li>
+                    <li>undergoes processing</li>
+                    <li>is extracted</li>
+                    <li>is filtered</li>
+                    <li>is transported</li>
+                    <li>is assembled</li>
+                    <li>is manufactured</li>
+                    <li>results in</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔟 Map Vocabulary</h3>
+                <ul>
+                    <li>was replaced by</li>
+                    <li>was converted into</li>
+                    <li>was expanded</li>
+                    <li>was constructed</li>
+                    <li>was demolished</li>
+                    <li>was relocated</li>
+                    <li>was extended</li>
+                    <li>underwent redevelopment</li>
+                    <li>remained intact</li>
+                    <li>was transformed into</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="speaking-header" class="section-header">4. Speaking Upgrade</div>
+        <div id="speaking-content" class="grid">
+            <div class="card">
+                <h3>🔹 1. Replace Weak Verbs</h3>
+                <ul>
+                    <li><strong>get</strong> → obtain / acquire / receive / achieve</li>
+                    <li><strong>make</strong> → create / generate / develop / establish</li>
+                    <li><strong>do</strong> → perform / carry out / undertake</li>
+                    <li><strong>put</strong> → implement / apply / invest</li>
+                    <li><strong>take</strong> → undertake / pursue / adopt</li>
+                    <li><strong>use</strong> → utilise / apply / employ</li>
+                    <li><strong>work</strong> → operate / function / collaborate</li>
+                    <li><strong>learn</strong> → acquire / master / develop expertise in</li>
+                    <li><strong>improve</strong> → enhance / refine / strengthen</li>
+                    <li><strong>help</strong> → assist / facilitate / contribute to</li>
+                    <li><strong>allow</strong> → enable / provide the opportunity to</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔹 2. Replace Basic Adjectives</h3>
+                <ul>
+                    <li><strong>very important</strong> → crucial / vital / essential</li>
+                    <li><strong>very big</strong> → significant / substantial / considerable</li>
+                    <li><strong>very small</strong> → minor / minimal / marginal</li>
+                    <li><strong>very good</strong> → effective / beneficial / valuable</li>
+                    <li><strong>very bad</strong> → detrimental / harmful / counterproductive</li>
+                    <li><strong>easy</strong> → straightforward / manageable</li>
+                    <li><strong>difficult</strong> → challenging / demanding / complex</li>
+                    <li><strong>happy</strong> → satisfied / fulfilled / delighted</li>
+                    <li><strong>amazing</strong> → remarkable / impressive / outstanding</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔹 3. Upgrade Common Words</h3>
+                <ul>
+                    <li><strong>problem</strong> → obstacle / issue / limitation / challenge</li>
+                    <li><strong>limited vocabulary</strong> → restricted lexical range</li>
+                    <li><strong>gain knowledge</strong> → acquire knowledge / broaden understanding</li>
+                    <li><strong>real world</strong> → practical environment / real-life context</li>
+                    <li><strong>communication skill</strong> → interpersonal competence</li>
+                    <li><strong>confidence</strong> → self-assurance</li>
+                    <li><strong>hesitation</strong> → lack of fluency / pauses in delivery</li>
+                    <li><strong>repetition</strong> → redundancy</li>
+                    <li><strong>clarity</strong> → precision / coherence</li>
+                    <li><strong>improve speaking</strong> → enhance verbal fluency</li>
+                    <li><strong>focus</strong> → concentrate / prioritise</li>
+                    <li><strong>important</strong> → significant / influential</li>
+                    <li><strong>essential</strong> → indispensable / fundamental</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔹 4. Strong Linking Devices</h3>
+                <ul>
+                    <li><strong>This is because</strong> → This stems from the fact that</li>
+                    <li><strong>As a result</strong> → Consequently / Therefore / As a consequence</li>
+                    <li><strong>On the other hand</strong> → Conversely / In contrast</li>
+                    <li><strong>For example</strong> → For instance</li>
+                    <li><strong>In my opinion</strong> → From my perspective</li>
+                    <li><strong>I think</strong> → I would argue that</li>
+                    <li><strong>Because</strong> → Due to / Owing to / Since</li>
+                    <li><strong>So</strong> → Therefore / Thus</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔹 5. High-Level Phrases</h3>
+                <ul>
+                    <li>plays a vital role → plays a pivotal role</li>
+                    <li>has a positive impact → has a profound impact</li>
+                    <li>very common → widely prevalent</li>
+                    <li>more and more → increasingly</li>
+                    <li>in the future → in the long term</li>
+                    <li>at the beginning → initially</li>
+                    <li>over time → gradually / progressively</li>
+                    <li>a lot of people → a significant number of people</li>
+                    <li>helps me a lot → contributes significantly</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔹 6. Academic Verbs (Part 3)</h3>
+                <ul>
+                    <li>analyse</li>
+                    <li>evaluate</li>
+                    <li>justify</li>
+                    <li>demonstrate</li>
+                    <li>highlight</li>
+                    <li>emphasise</li>
+                    <li>illustrate</li>
+                    <li>influence</li>
+                    <li>affect</li>
+                    <li>contribute</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>🔹 7. Advanced Topic Words</h3>
+                <ul>
+                    <li>adaptability</li>
+                    <li>resilience</li>
+                    <li>discipline</li>
+                    <li>consistency</li>
+                    <li>efficiency</li>
+                    <li>productivity</li>
+                    <li>motivation</li>
+                    <li>innovation</li>
+                    <li>collaboration</li>
+                    <li>critical thinking</li>
+                    <li>time management</li>
+                    <li>self-development</li>
+                    <li>accountability</li>
+                    <li>professional growth</li>
+                    <li>decision-making</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle('dark-mode');
+            
+            const btn = document.querySelector('.theme-toggle');
+            if (body.classList.contains('dark-mode')) {
+                btn.textContent = '☀️ Light Mode';
+            } else {
+                btn.textContent = '🌙 Dark Mode';
+            }
+        }
+
+        function filterContent(category) {
+            // Highlight active button
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Sections
+            const sections = ['general', 'task2', 'task1', 'speaking'];
+
+            if (category === 'all') {
+                sections.forEach(sec => {
+                    document.getElementById(sec + '-header').classList.remove('hidden');
+                    document.getElementById(sec + '-content').classList.remove('hidden');
+                });
+            } else {
+                sections.forEach(sec => {
+                    if (sec === category) {
+                        document.getElementById(sec + '-header').classList.remove('hidden');
+                        document.getElementById(sec + '-content').classList.remove('hidden');
+                    } else {
+                        document.getElementById(sec + '-header').classList.add('hidden');
+                        document.getElementById(sec + '-content').classList.add('hidden');
+                    }
+                });
+            }
+        }
+    </script>
+</body>
+</html>
